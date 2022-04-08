@@ -1,5 +1,7 @@
 const https = require('https');
 
+global.userAgent = 'nymeria.js/1.0.1';
+
 module.exports = function (apiKey) {
   return {
     verify: function (email, callback) {
@@ -11,7 +13,7 @@ module.exports = function (apiKey) {
         headers: {
           'X-Api-Key': apiKey,
           'Content-Type': 'application/json',
-          'User-Agent': 'nymeria.js/1.0.1',
+          'User-Agent': userAgent,
         },
       };
 
@@ -45,7 +47,7 @@ module.exports = function (apiKey) {
           headers: {
             'X-Api-Key': apiKey,
             'Content-Type': 'application/json',
-            'User-Agent': 'nymeria.js/1.0.1',
+            'User-Agent': userAgent,
           },
         };
 
@@ -79,7 +81,7 @@ module.exports = function (apiKey) {
         headers: {
           'X-Api-Key': apiKey,
           'Content-Type': 'application/json',
-          'User-Agent': 'nymeria.js/1.0.1',
+          'User-Agent': userAgent,
         },
       };
 
@@ -111,7 +113,7 @@ module.exports = function (apiKey) {
         method: 'POST',
         headers: {
           'X-Api-Key': apiKey,
-          'User-Agent': 'nymeria.js/1.0.1',
+          'User-Agent': userAgent,
         },
       };
 
