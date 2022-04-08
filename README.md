@@ -1,6 +1,12 @@
 Nymeria
 =======
 
+The official npm package to interact with the Nymeria service and API.
+
+Nymeria makes it easy to enrich data with contact information such as email
+addresses, phone numbers and social links. The npm package wraps Nymeria's [public
+API](https://www.nymeria.io/developers) so you don't have to.
+
 Authentication
 --------------
 
@@ -66,4 +72,4 @@ Bulk Enrichment
 License
 -------
 
-MIT
+[MIT](LICENSE)
