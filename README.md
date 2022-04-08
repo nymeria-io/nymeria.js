@@ -1,6 +1,8 @@
 Nymeria
 =======
 
+[![NPM Version](https://img.shields.io/npm/v/@nymeria/nymeria-js?style=flat-square)](https://www.npmjs.com/package/@nymeria/nymeria-js)
+
 The official npm package to interact with the Nymeria service and API.
 
 Nymeria makes it easy to enrich data with contact information such as email
