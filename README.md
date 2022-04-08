@@ -19,10 +19,8 @@ Authentication
 
   let client = nymeria('API_KEY');
 
-  client.isAuthenticated( (resp, error) => {
-      if (error === null) {
-        console.log(resp);
-      }
+  client.isAuthenticated().then((resp) => {
+      console.log(resp);
   });
 ```
 
@@ -34,10 +32,8 @@ Verification
 
   let client = nymeria('API_KEY');
 
-  client.verify( 'bill@microsoft.com', (resp, error) => {
-      if (error === null) {
-        console.log(resp.status);
-      }
+  client.verify('bill@microsoft.com').then((resp) => {
+      console.log('It is good to use!');
   });
 ```
 
@@ -49,11 +45,9 @@ Enrichment
 
   let client = nymeria('API_KEY');
 
-  client.enrich( { url: 'github.com/nymeriaio' }, (resp, error) => {
-      if (error === null) {
-        console.log(resp.data.emails);
-        console.log(resp.data.social);
-      }
+  client.enrich({ url: 'github.com/nymeriaio'}).then((resp) => {
+      console.log(resp.data.emails);
+      console.log(resp.data.social);
   });
 ```
 
@@ -65,11 +59,9 @@ Bulk Enrichment
 
   let client = nymeria('API_KEY');
 
-  client.enrich( [{ url: 'github.com/nymeriaio' }, { url: 'github.com/dhh' } ], (resp, error) => {
-      if (error === null) {
-        console.log(resp.data.emails);
-        console.log(resp.data.social);
-      }
+  client.enrich([{ url: 'github.com/nymeriaio' }, { url: 'linkedin.com/in/wozniaksteve' }]).then((resp) => {
+      console.log(resp.data.emails);
+      console.log(resp.data.social);
   });
 ```
 
