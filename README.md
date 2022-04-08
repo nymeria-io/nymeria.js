@@ -7,6 +7,8 @@ Nymeria makes it easy to enrich data with contact information such as email
 addresses, phone numbers and social links. The npm package wraps Nymeria's [public
 API](https://www.nymeria.io/developers) so you don't have to.
 
+![Nymeria makes finding contact details a breeze.](https://www.nymeria.io/assets/images/marquee.png)
+
 Authentication
 --------------
 
