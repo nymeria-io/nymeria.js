@@ -1,6 +1,6 @@
 {
   "name": "@nymeria/nymeria-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Easily verify and enrich data using Nymeria's service.",
   "main": "index.js",
   "scripts": {

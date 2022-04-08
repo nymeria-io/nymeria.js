@@ -9,8 +9,9 @@ module.exports = function (apiKey) {
         path: `/api/v3/verify`,
         method: 'POST',
         headers: {
-          "X-Api-Key": apiKey,
+          'X-Api-Key': apiKey,
           'Content-Type': 'application/json',
+          'User-Agent': 'nymeria.js/1.0.1',
         },
       };
 
@@ -42,8 +43,9 @@ module.exports = function (apiKey) {
           path: `/api/v3/bulk-enrich`,
           method: 'POST',
           headers: {
-            "X-Api-Key": apiKey,
+            'X-Api-Key': apiKey,
             'Content-Type': 'application/json',
+            'User-Agent': 'nymeria.js/1.0.1',
           },
         };
 
@@ -75,8 +77,9 @@ module.exports = function (apiKey) {
         path: `/api/v3/enrich`,
         method: 'POST',
         headers: {
-          "X-Api-Key": apiKey,
+          'X-Api-Key': apiKey,
           'Content-Type': 'application/json',
+          'User-Agent': 'nymeria.js/1.0.1',
         },
       };
 
@@ -107,7 +110,8 @@ module.exports = function (apiKey) {
         path: `/api/v3/check-authentication`,
         method: 'POST',
         headers: {
-          "X-Api-Key": apiKey,
+          'X-Api-Key': apiKey,
+          'User-Agent': 'nymeria.js/1.0.1',
         },
       };
 
