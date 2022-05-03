@@ -1,6 +1,6 @@
 const https = require('https');
 
-global.userAgent = 'nymeria.js/1.0.1';
+global.userAgent = 'nymeria.js/1.0.3';
 
 module.exports = function (apiKey) {
   let request = (endpoint, body) => {
