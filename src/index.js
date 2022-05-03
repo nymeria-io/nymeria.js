@@ -1,5 +1,6 @@
 const https = require('https');
 
+/* used to identify the library with Nymeria's server */
 global.userAgent = 'nymeria.js/1.0.3';
 
 module.exports = function (apiKey) {
@@ -38,15 +39,18 @@ module.exports = function (apiKey) {
       });
 
       req.write(JSON.stringify(body));
-      req.end(); /* start the request */
+
+      req.end();
     });
   };
 
   return {
+    /* works on single email addresses at the moment */
     verify: function (email) {
       return request('verify', { email: email });
     },
 
+    /* handles single enrichment and bulk enrichment seamlessly */
     enrich: function (args) {
       if (Array.isArray(args)) {
         return request('bulk-enrich', { people: args });
