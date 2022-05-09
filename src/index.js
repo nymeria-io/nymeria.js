@@ -4,7 +4,11 @@ const https = require('https');
 global.userAgent = 'nymeria.js/1.0.4';
 
 module.exports = function (apiKey) {
-  let request = (endpoint, body) => {
+  let request = (endpoint, body, method) => {
+    if (!method) {
+      method = 'POST';
+    }
+
     if (!body) {
       body = {};
     }
@@ -14,7 +18,7 @@ module.exports = function (apiKey) {
         hostname: 'www.nymeria.io',
         port: 443,
         path: `/api/v3/${endpoint}`,
-        method: 'POST',
+        method: method,
         headers: {
           'X-Api-Key': apiKey,
           'Content-Type': 'application/json',
@@ -61,6 +65,14 @@ module.exports = function (apiKey) {
 
     isAuthenticated: function () {
       return request('check-authentication');
+    },
+
+    people: function (query) {
+      return request('people', query, 'GET');
+    },
+
+    reveal: function (uuids) {
+      return request('people', { uuids: uuids });
     },
   };
 };
