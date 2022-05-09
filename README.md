@@ -127,6 +127,49 @@ client.enrich([{ url: 'github.com/nymeriaio' }, { email: 'steve@woz.org' }, { id
 });
 ```
 
+### Search for People
+
+You can query Nymeria's people database for people that match a certain
+criteria. You can view previews for each person and "unlock" the complete
+profile.
+
+Currently, you can query using any of the following parameters:
+
+1. `q` a raw query which will match keywords in a person's name, title, skills,
+   etc.
+2. `first_name`
+3. `last_name`
+4. `title`
+5. `company`
+6. `skills` a comma separated list of skills.
+7. `location` city, state, country, etc.
+8. `country` matches country only.
+
+```javascript
+let nymeria = require('@nymeria/nymeria-js');
+
+let client = nymeria('ny_apikey');
+
+client.search({ q: 'Ruby on Rails' }).then(preview => {
+  let uuids = [];
+
+  preview.data.forEach(person => {
+      uuids.push(person.uuid);
+  });
+
+  client.reveal(uuids).then(person => {
+    if (person.status === 'success') {
+      person.data.forEach((match) => {
+        console.log(match.result.bio);
+        console.log(match.result.emails);
+        console.log(match.result.phone_numbers);
+        console.log(match.result.social);
+      });
+    }
+  });
+});
+```
+
 License
 -------
 
