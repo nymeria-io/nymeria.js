@@ -1,6 +1,6 @@
 {
   "name": "@nymeria/nymeria-js",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Nymeria makes it easy to discover and connect with anyone on LinkedIn, Facebook, Twitter and Github.",
   "main": "src/index.js",
   "unpkg": "dist/index.js",
