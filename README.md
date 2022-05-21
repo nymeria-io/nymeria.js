@@ -150,7 +150,7 @@ let nymeria = require('@nymeria/nymeria-js');
 
 let client = nymeria('ny_apikey');
 
-client.search({ q: 'Ruby on Rails' }).then(preview => {
+client.people({ q: 'Ruby on Rails' }).then(preview => {
   let uuids = [];
 
   preview.data.forEach(person => {
