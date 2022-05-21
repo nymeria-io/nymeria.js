@@ -160,10 +160,10 @@ client.people({ q: 'Ruby on Rails' }).then(preview => {
   client.reveal(uuids).then(person => {
     if (person.status === 'success') {
       person.data.forEach((match) => {
-        console.log(match.result.bio);
-        console.log(match.result.emails);
-        console.log(match.result.phone_numbers);
-        console.log(match.result.social);
+        console.log(match.bio);
+        console.log(match.emails);
+        console.log(match.phone_numbers);
+        console.log(match.social);
       });
     }
   });
