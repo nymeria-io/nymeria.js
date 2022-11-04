@@ -31,25 +31,16 @@ You can then use Nymeria within your webpage, browser plugin, electron app, etc.
 ```javascript
 let client = nymeria('YOUR API KEY GOES HERE');
 
-client.isAuthenticated().then(function () {
-  console.log('OK!'); /* api key is valid */
-});
-
-client.enrich({ url: 'github.com/nymeriaio' }).then(function (resp) {
-  if (resp.status === 'success') {
-    console.log(resp.data.bio);
+client.person.enrich({ profile: 'github.com/nymeriaio' }).then(function (resp) {
     console.log(resp.data.emails);
     console.log(resp.data.phone_numbers);
-    console.log(resp.data.social);
-  }
+    console.log(resp.data.profiles);
 });
 
-client.verify('dev@nymeria.io').then(function (resp) {
-  if (resp.status === 'success') {
-    if (resp.result === 'valid') {
+client.email.verify('dev@nymeria.io').then(function (resp) {
+    if (resp.data.result === 'valid') {
       console.log('Email is valid!');
     }
-  }
 });
 ```
 
@@ -58,10 +49,6 @@ client.verify('dev@nymeria.io').then(function (resp) {
 All actions that interact with the Nymeria service assume an API key has been
 set and will fail if a key hasn't been set. A key only needs to be set once and
 can be set at the start of your program.
-
-If you want to check a key's validity you can use the isAuthenticated
-function to verify the validity of a key that has been set. If no error is
-returned then the API key is valid.
 
 ### Installation
 
@@ -76,25 +63,16 @@ let nymeria = require('@nymeria/nymeria-js');
 
 let client = nymeria('YOUR API KEY GOES HERE');
 
-client.isAuthenticated().then(function () {
-  console.log('OK!'); /* api key is valid */
-});
-
-client.enrich({ url: 'github.com/nymeriaio' }).then(function (resp) {
-  if (resp.status === 'success') {
-    console.log(resp.data.bio);
+client.person.enrich({ profile: 'github.com/nymeriaio' }).then(function (resp) {
     console.log(resp.data.emails);
     console.log(resp.data.phone_numbers);
     console.log(resp.data.social);
-  }
 });
 
-client.verify('bill@microsoft.com').then(function (resp) {
-  if (resp.status === 'success') {
+client.email.verify('bill@microsoft.com').then(function (resp) {
     if (resp.result === 'valid') {
       console.log('Email is valid!');
     }
-  }
 });
 ```
 
@@ -112,7 +90,7 @@ are set up to send and receive email, etc.
 
 You can enrich profiles using a number of different parameters:
 
-1. `url` (address of a person's social media profile, like LinkedIn, Twitter, Facebook or Github)
+1. `profile` (address of a person's social media profile, like LinkedIn, Twitter, Facebook or Github)
 2. `email` (a person's email address)
 3. `identifier` (a numeric identifier, such as a LinkedIn member ID `lid:12345` or a Facebook ID `fid:12345`)
 
@@ -124,33 +102,12 @@ let nymeria = require('@nymeria/nymeria-js');
 
 let client = nymeria('YOUR API KEY GOES HERE');
 
-client.enrich({ url: 'github.com/nymeriaio', email: 'someone@nymeria.io', identifier: 'fid:12345' }).then(function (resp) {
-  if (resp.status === 'success') {
-    console.log(resp.data.bio);
-    console.log(resp.data.emails);
-    console.log(resp.data.phone_numbers);
-    console.log(resp.data.social);
-  }
-});
-```
-
-Enrichments can be made in bulk. You can simply pass multiple look up objects
-to `enrich`. For example:
-
-```javascript
-let nymeria = require('@nymeria/nymeria-js');
-
-let client = nymeria('YOUR API KEY GOES HERE');
-
-client.enrich([{ url: 'github.com/nymeriaio' }, { email: 'steve@woz.org' }, { identifier: 'fid:12345' }]).then((resp) => {
-  if (resp.status === 'success') {
-    resp.data.forEach((match) => {
-      console.log(match.result.bio);
-      console.log(match.result.emails);
-      console.log(match.result.phone_numbers);
-      console.log(match.result.social);
-    });
-  }
+client.person.bulk_enrich([{ profile: 'github.com/nymeriaio', email: 'someone@nymeria.io', lid: '12345' }]).then(function (resp) {
+  resp.forEach((r) => {
+    console.log(r.data.emails);
+    console.log(r.data.phone_numbers);
+    console.log(r.data.social);
+  })
 });
 ```
 
@@ -193,45 +150,16 @@ let nymeria = require('@nymeria/nymeria-js');
 
 let client = nymeria('YOUR API KEY GOES HERE');
 
-client.people({ q: 'Ruby on Rails' }).then(preview => {
-  let uuids = [];
+client.person.search({ query: 'skills:"Ruby on Rails"' }).then(people => {
+  let ids = [];
 
-  preview.data.forEach(person => {
-      uuids.push(person.uuid);
+  people.forEach(person => {
+      ids.push(person.data.id);
   });
 
-  client.reveal(uuids).then(person => {
-    if (person.status === 'success') {
-      person.data.forEach((match) => {
-        console.log(match.bio);
-        console.log(match.emails);
-        console.log(match.phone_numbers);
-        console.log(match.social);
-      });
-    }
-  });
+  // Do something...
 });
 ```
-
-You can perform searches using Nymeria's database of people. The search works
-using two functions:
-
-1. `people` which performs a search and returns a preview of each person.
-1. `reveal` which takes uuids of people and returns complete profiles.
-
-Note, using people does not consume any credits but using reveal will
-consume credit for each profile that is revealed.
-
-The object parameter enables you to specify your search criteria. In
-particular, you can specify:
-
-1. `q` for general keyword matching text.
-1. `location` to match a specific city or country.
-1. `company` to match a current company.
-1. `title` to match current titles.
-1. `has_email` if you only want to find people that have email addresses.
-1. `has_phone` if you only want to find people that has phone numbers.
-1. `skills` if you are looking to match specific skills.
 
 By default, 10 people will be returned for
 each page of search results. You can

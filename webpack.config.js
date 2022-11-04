@@ -19,7 +19,7 @@ const browser = {
   },
   plugins: [],
   resolve: {
-    extensions: [".js"],
+    extensions: [".js"]
   },
 };
 

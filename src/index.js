@@ -1,30 +1,38 @@
 const https = require('https');
 
 /* used to identify the library with Nymeria's server */
-global.userAgent = 'nymeria.js/1.0.5';
+global.userAgent = 'nymeria.js/1.1.1';
 
 module.exports = function (apiKey) {
-  let request = (endpoint, body, method) => {
-    if (!method) {
-      method = 'POST';
-    }
-
-    if (!body) {
-      body = {};
+  let request = (method, endpoint, payload) => {
+    if (!payload) {
+      payload = {};
     }
 
     return new Promise((resolve, reject) => {
+      let headers = {
+        'X-Api-Key': apiKey,
+        'User-Agent': userAgent,
+      };
+
+      headers['Accept'] = 'application/json';
+
+      if (method === 'POST') {
+        headers['Content-Type'] = 'application/json';
+      }
+
       let options = {
+        protocol: 'https:',
         hostname: 'www.nymeria.io',
         port: 443,
-        path: `/api/v3/${endpoint}`,
+        path: `/api/v4/${endpoint}`,
         method: method,
-        headers: {
-          'X-Api-Key': apiKey,
-          'Content-Type': 'application/json',
-          'User-Agent': userAgent,
-        },
+        headers: headers,
       };
+
+      if (method !== 'POST') {
+        options.path = options.path + '?' + new URLSearchParams(payload).toString()
+      }
 
       const req = https.request(options, res => {
         var data = '';
@@ -42,37 +50,55 @@ module.exports = function (apiKey) {
         reject(error);
       });
 
-      req.write(JSON.stringify(body));
+      if (payload) {
+        req.write(JSON.stringify(payload));
+      }
 
       req.end();
     });
   };
 
   return {
-    /* works on single email addresses at the moment */
-    verify: function (email) {
-      return request('verify', { email: email });
+    company: {
+      enrich: (args) => {
+        return request('GET', 'company/enrich', args);
+      },
+      search: (args) => {
+        return request('GET', 'company/search', args);
+      },
     },
 
-    /* handles single enrichment and bulk enrichment seamlessly */
-    enrich: function (args) {
-      if (Array.isArray(args)) {
-        return request('bulk-enrich', { people: args });
-      }
-
-      return request('enrich', args);
+    email: {
+      verify: (email) => {
+        return request('GET', 'email/verify', { email: email });
+      },
+      bulk_verify: (args) => {
+        return request('POST', 'email/verify/bulk', { requests: args });
+      },
     },
 
-    isAuthenticated: function () {
-      return request('check-authentication');
-    },
-
-    people: function (query) {
-      return request('people', query, 'GET');
-    },
-
-    reveal: function (uuids) {
-      return request('people', { uuids: uuids });
+    person: {
+      enrich: (args) => {
+        return request('GET', 'person/enrich', args);
+      },
+      bulk_enrich: (args) => {
+        return request('POST', 'person/enrich/bulk', { requests: args });
+      },
+      identify: (args) => {
+        return request('GET', 'person/identify', args);
+      },
+      preview: (args) => {
+        return request('GET', 'person/enrich/preview', args);
+      },
+      retrieve: (id) => {
+        return request('GET', `person/retrieve/${id}`, {});
+      },
+      bulk_retrieve: (args) => {
+        return request('POST', 'person/retrieve/bulk', { requests: args });
+      },
+      search: (args) => {
+        return request('GET', 'person/search', args);
+      },
     },
   };
 };
