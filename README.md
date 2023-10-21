@@ -53,7 +53,7 @@ can be set at the start of your program.
 ### Installation
 
 ```bash
-$ npm install @nymeria/nymeria-js
+npm install @nymeria/nymeria-js
 ```
 
 ### Usage
