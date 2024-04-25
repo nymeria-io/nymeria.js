@@ -67,7 +67,7 @@ module.exports = function (apiKey) {
         reject({
           error: true,
           message: error,
-          developer:
+          developers:
             "An error happened while receiving data. Perhaps the network disconnected?",
         });
       });
