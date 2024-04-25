@@ -1,7 +1,7 @@
-const https = require('https');
+const https = require("https");
 
 /* used to identify the library with Nymeria's server */
-global.userAgent = 'nymeria.js/1.1.1';
+global.userAgent = "nymeria.js/1.1.2";
 
 module.exports = function (apiKey) {
   let request = (method, endpoint, payload) => {
@@ -10,44 +10,66 @@ module.exports = function (apiKey) {
     }
 
     return new Promise((resolve, reject) => {
+      const accept = "application/json";
+
       let headers = {
-        'X-Api-Key': apiKey,
-        'User-Agent': userAgent,
+        "X-Api-Key": apiKey,
+        "User-Agent": userAgent,
       };
 
-      headers['Accept'] = 'application/json';
+      headers["Accept"] = accept;
 
-      if (method === 'POST') {
-        headers['Content-Type'] = 'application/json';
+      if (method === "POST") {
+        headers["Content-Type"] = accept;
       }
 
       let options = {
-        protocol: 'https:',
-        hostname: 'www.nymeria.io',
+        protocol: "https:",
+        hostname: "www.nymeria.io",
         port: 443,
         path: `/api/v4/${endpoint}`,
         method: method,
         headers: headers,
       };
 
-      if (method !== 'POST') {
-        options.path = options.path + '?' + new URLSearchParams(payload).toString()
+      if (method !== "POST") {
+        options.path =
+          options.path + "?" + new URLSearchParams(payload).toString();
       }
 
-      const req = https.request(options, res => {
-        var data = '';
+      const req = https.request(options, (res) => {
+        if (
+          res.headers["content-type"] &&
+          res.headers["content-type"] !== accept
+        ) {
+          reject({
+            error: true,
+            message: "Unknown response format.",
+            developers:
+              "It's likely the API was in maintenance mode or you hit your account's rate limit.",
+          });
 
-        res.on('data', function (chunk) {
+          return; /* bail out */
+        }
+
+        var data = "";
+
+        res.on("data", function (chunk) {
           data += chunk;
         });
 
-        res.on('end', function () {
+        res.on("end", function () {
           resolve(JSON.parse(data));
         });
       });
 
-      req.on('error', error => {
-        reject(error);
+      req.on("error", (error) => {
+        reject({
+          error: true,
+          message: error,
+          developer:
+            "An error happened while receiving data. Perhaps the network disconnected?",
+        });
       });
 
       if (payload) {
@@ -61,43 +83,43 @@ module.exports = function (apiKey) {
   return {
     company: {
       enrich: (args) => {
-        return request('GET', 'company/enrich', args);
+        return request("GET", "company/enrich", args);
       },
       search: (args) => {
-        return request('GET', 'company/search', args);
+        return request("GET", "company/search", args);
       },
     },
 
     email: {
       verify: (email) => {
-        return request('GET', 'email/verify', { email: email });
+        return request("GET", "email/verify", { email: email });
       },
       bulk_verify: (args) => {
-        return request('POST', 'email/verify/bulk', { requests: args });
+        return request("POST", "email/verify/bulk", { requests: args });
       },
     },
 
     person: {
       enrich: (args) => {
-        return request('GET', 'person/enrich', args);
+        return request("GET", "person/enrich", args);
       },
       bulk_enrich: (args) => {
-        return request('POST', 'person/enrich/bulk', { requests: args });
+        return request("POST", "person/enrich/bulk", { requests: args });
       },
       identify: (args) => {
-        return request('GET', 'person/identify', args);
+        return request("GET", "person/identify", args);
       },
       preview: (args) => {
-        return request('GET', 'person/enrich/preview', args);
+        return request("GET", "person/enrich/preview", args);
       },
       retrieve: (id) => {
-        return request('GET', `person/retrieve/${id}`, {});
+        return request("GET", `person/retrieve/${id}`, {});
       },
       bulk_retrieve: (args) => {
-        return request('POST', 'person/retrieve/bulk', { requests: args });
+        return request("POST", "person/retrieve/bulk", { requests: args });
       },
       search: (args) => {
-        return request('GET', 'person/search', args);
+        return request("GET", "person/search", args);
       },
     },
   };
