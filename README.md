@@ -44,6 +44,21 @@ client.email.verify('dev@nymeria.io').then(function (resp) {
 });
 ```
 
+Errors can be caught and handled. 
+
+```javascript
+let client = nymeria('YOUR API KEY GOES HERE');
+
+client.person.enrich({ profile: 'github.com/nymeriaio' }).then(function (resp) {
+    console.log(resp.data.emails);
+    console.log(resp.data.profiles);
+}).catch( resp => {
+  if (resp && resp.error) {
+    console.log(`Looks like an error happened: ${resp.message} -> more details: ${resp.developers}`)
+  }
+});
+```
+
 ## Node
 
 All actions that interact with the Nymeria service assume an API key has been
