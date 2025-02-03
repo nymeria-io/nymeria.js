@@ -1,6 +1,6 @@
 {
   "name": "@nymeria/nymeria-js",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Nymeria makes it easy to discover and connect with anyone on LinkedIn, Facebook, Twitter and Github.",
   "main": "src/index.js",
   "unpkg": "dist/index.js",
@@ -28,7 +28,7 @@
     "social-links"
   ],
   "devDependencies": {
-    "webpack": "^4.0.0",
-    "webpack-cli": "^4.2.0"
+    "webpack": "^5.0.0",
+    "webpack-cli": "^5.0.0"
   }
 }
