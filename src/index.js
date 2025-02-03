@@ -1,9 +1,9 @@
 const https = require("https");
 
 /* used to identify the library with Nymeria's server */
-global.userAgent = "nymeria.js/1.1.2";
+global.userAgent = "nymeria.js/1.2.0";
 
-module.exports = function (apiKey) {
+module.exports = function(apiKey) {
   let request = (method, endpoint, payload) => {
     if (!payload) {
       payload = {};
@@ -54,11 +54,11 @@ module.exports = function (apiKey) {
 
         var data = "";
 
-        res.on("data", function (chunk) {
+        res.on("data", function(chunk) {
           data += chunk;
         });
 
-        res.on("end", function () {
+        res.on("end", function() {
           resolve(JSON.parse(data));
         });
       });
@@ -105,9 +105,6 @@ module.exports = function (apiKey) {
       },
       bulk_enrich: (args) => {
         return request("POST", "person/enrich/bulk", { requests: args });
-      },
-      identify: (args) => {
-        return request("GET", "person/identify", args);
       },
       preview: (args) => {
         return request("GET", "person/enrich/preview", args);
