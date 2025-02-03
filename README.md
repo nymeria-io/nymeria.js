@@ -117,7 +117,12 @@ let nymeria = require('@nymeria/nymeria-js');
 
 let client = nymeria('YOUR API KEY GOES HERE');
 
-client.person.bulk_enrich([{ profile: 'github.com/nymeriaio', email: 'someone@nymeria.io', lid: '12345' }]).then(function (resp) {
+let query = [
+  { params: { profile: 'github.com/dhh' } },
+  { params: { email: 'someoen@somewhere.com' } },
+];
+
+client.person.bulk_enrich(query).then(function(resp) {
   resp.forEach((r) => {
     console.log(r.data.emails);
     console.log(r.data.phone_numbers);
@@ -160,19 +165,31 @@ parameter.
 
 ## Searching for People
 
+Currently you can search for:
+
+1. `first_name`
+1. `last_name`
+1. `title`
+1. `company`
+1. `industry`
+1. `location`
+1. `country`
+
 ```javascript
 let nymeria = require('@nymeria/nymeria-js');
 
 let client = nymeria('YOUR API KEY GOES HERE');
 
-client.person.search({ query: 'skills:"Ruby on Rails"' }).then(people => {
-  let ids = [];
+let query = {
+  company: 'nymeria',
+  title: 'founder',
+  limit: 1,
+};
 
-  people.forEach(person => {
-      ids.push(person.data.id);
+client.person.search(query).then(response => {
+  response.data.forEach(person => {
+    console.log(person.first_name, person.emails);
   });
-
-  // Do something...
 });
 ```
 
